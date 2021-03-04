@@ -1,13 +1,23 @@
-const http = require("http");
+const express = require("express");
+const app = express();
 
-http
-  .createServer((request, response) => {
-    response.setHeader("Content-Disposition", "attachment; filename=lista.csv");
-    response.writeHead(200, { "Content-Type": "application/csv" });
-    response.write("1,Emanuel\n");
-    response.write("2,Michelle\n");
-    response.end();
-  })
-  .listen(8080);
+const port = 8080;
 
-console.log("escuchando en el puerto 8080");
+// servir contenido estatico
+app.use(express.static("public"));
+
+app.get("/generic", (req, res) => {
+  res.sendFile(__dirname + "/public/generic.html");
+});
+
+app.get("/elements", (req, res) => {
+  res.sendFile(__dirname + "/public/elements.html");
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(__dirname + "/public-old/404.html");
+});
+
+app.listen(port, () => {
+  console.log(`Esuchando en el puerto ${port}`);
+});
